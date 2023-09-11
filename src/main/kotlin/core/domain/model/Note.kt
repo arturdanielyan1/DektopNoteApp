@@ -8,4 +8,14 @@ data class Note(
     val title: String,
     val content: String,
     val created: LocalDateTime
-) : Argument
+) : Argument {
+
+    companion object {
+        val EMPTY =  Note(
+            id = null,
+            title = "",
+            content = "",
+            created = LocalDateTime.MIN
+        )
+    }
+}

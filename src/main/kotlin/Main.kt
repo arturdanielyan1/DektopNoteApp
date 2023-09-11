@@ -1,22 +1,21 @@
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import core.coreModule
 import core.domain.model.Note
+import feature_edit_note.featureEditNoteModule
+import feature_edit_note.presentation.EditNoteScreen
+import feature_edit_note.presentation.EditNoteViewState
 import feature_notes.featureNotesModule
 import feature_notes.presentation.NotesScreen
 import feature_notes.presentation.NotesViewState
-import navigation.NavController
 import navigation.NavHost
+import navigation.rememberNavController
 import org.koin.compose.rememberKoinInject
 import org.koin.core.context.startKoin
 
@@ -24,7 +23,7 @@ import org.koin.core.context.startKoin
 @Preview
 fun App() {
 
-    val navController = remember { NavController() }
+    val navController = rememberNavController()
 
     NavHost(
         startDestination = "notes_screen",
@@ -33,34 +32,24 @@ fun App() {
         composable(
             route = "notes_screen"
         ) {
-            val notesState = rememberKoinInject<NotesViewState>()
-            NotesScreen(notesState, navController)
+            val viewState = rememberKoinInject<NotesViewState>()
+            NotesScreen(viewState, navController)
         }
 
         composable<Note>(
             route = "edit_notes"
         ) { note ->
-            Text(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable { navController.back() },
-                text = note.title,
-                textAlign = TextAlign.Center
-            )
+            val viewState = rememberKoinInject<EditNoteViewState>()
+            viewState.putInitialData(note)
+            EditNoteScreen(viewState, navController)
         }
-
-        this
-    }.render()
-
-//    val notesState = rememberKoinInject<NotesViewState>()
-
-//    NotesScreen(notesState)
+    }
 }
 
 fun main() {
 
     startKoin {
-        modules(coreModule + featureNotesModule)
+        modules(coreModule + featureNotesModule + featureEditNoteModule)
     }
 
     application {

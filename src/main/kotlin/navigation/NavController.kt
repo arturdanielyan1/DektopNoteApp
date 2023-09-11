@@ -13,9 +13,10 @@ class NavController {
         private set
 
     fun <T : Argument> navigate(destination: String, args: T?) {
+        currentScreen.value = destination
         lastArgs = args
         screenChain.add(destination)
-        currentScreen.value = destination
+        println(screenChain)
     }
 
     fun navigate(destination: String) {
@@ -25,8 +26,9 @@ class NavController {
     fun back() {
         try {
             screenChain.pop()
+            println(screenChain)
             currentScreen.value = screenChain.peek()
-        } catch (e: NoSuchElementException) {
+        } catch (e: EmptyStackException) {
             throw IllegalStateException("Can't navigate back from the first screen in BackStack")
         }
     }

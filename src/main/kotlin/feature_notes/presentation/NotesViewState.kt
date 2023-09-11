@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class NotesViewState(
     private val getAllNotesUseCase: GetAllNotesUseCase,
     private val deleteNoteUseCase: DeleteNoteUseCase
-) : ViewState() {
+) : ViewState<Nothing>() {
 
     private val _notes = MutableStateFlow(NotesState())
     val notes = _notes.asStateFlow()
