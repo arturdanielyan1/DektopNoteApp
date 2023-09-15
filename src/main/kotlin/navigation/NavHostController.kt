@@ -58,7 +58,7 @@ class NavGraphBuilder {
     }
 }
 
-class NavHostController(
+private class NavHostController(
     private val navController: NavController,
     startDestination: String,
     navGraphBuilder: NavGraphBuilder.() -> Unit
