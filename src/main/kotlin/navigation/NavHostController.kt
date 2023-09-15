@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 
 interface Argument {
     object Empty : Argument
@@ -47,7 +48,7 @@ class NavGraphBuilder {
         exitTransition: () -> ExitTransition = { slideOutHorizontally(tween(500)) { -it } },
         content: @Composable () -> Unit
     ) {
-        composable<Argument>(
+        composable<Argument.Empty>(
             route = route,
             enterTransition = enterTransition,
             exitTransition = exitTransition
@@ -91,9 +92,13 @@ fun NavHost(
     startDestination: String,
     navGraphBuilder: NavGraphBuilder.() -> Unit
 ) {
-    NavHostController(
-        navController, startDestination, navGraphBuilder
-    ).render()
+    val navHost = rememberSaveable {
+        NavHostController(
+            navController, startDestination, navGraphBuilder
+        )
+    }
+
+    navHost.render()
 }
 
 @Composable

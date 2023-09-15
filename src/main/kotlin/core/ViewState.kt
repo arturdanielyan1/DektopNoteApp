@@ -14,7 +14,7 @@ abstract class ViewState<InputData : Argument> {
 
     private val dataAssigned = false
     open fun putInitialData(data: InputData) {
-        if(dataAssigned) throw IllegalStateException("Data can be assigned only once")
+        if(dataAssigned) throw IllegalStateException("Input Data can be assigned only once")
     }
     fun finalize() {
         viewStateScope.cancel()
