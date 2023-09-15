@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.domain.model.Note
+import navigation.navigationClickable
 
 @Composable
 fun NoteItem(
@@ -40,7 +41,7 @@ fun NoteItem(
                     color = MaterialTheme.colors.onBackground
                 ),
                 shape = RoundedCornerShape(10.dp),
-            ).clickable(onClick = onNoteClick)
+            ).navigationClickable(onClick = onNoteClick)
             .padding(16.dp)
     ) {
         Row(

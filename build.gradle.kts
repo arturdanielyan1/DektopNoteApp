@@ -44,6 +44,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
+            modules("java.compiler", "java.instrument" , "java.sql", "jdk.unsupported")
             packageName = "NoteDesktop"
             packageVersion = "1.0.0"
         }

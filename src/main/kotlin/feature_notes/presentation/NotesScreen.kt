@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import core.domain.model.Note
 import feature_notes.presentation.components.NoteItem
 import navigation.NavController
+import navigation.navigationClickable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -33,7 +35,10 @@ fun NotesScreen(
     ) {
         Icon(
             imageVector = Icons.Default.Add,
-            contentDescription = "Add note"
+            contentDescription = "Add note",
+            modifier = Modifier.navigationClickable {
+                navController.navigate("edit_notes", Note.EMPTY)
+            }
         )
         LazyVerticalStaggeredGrid(
             modifier = Modifier.fillMaxSize(),

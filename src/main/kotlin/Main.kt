@@ -1,3 +1,4 @@
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.desktop.ui.tooling.preview.Preview
@@ -30,14 +31,20 @@ fun App() {
         navController = navController
     ) {
         composable(
-            route = "notes_screen"
+            route = "notes_screen",
+            enterTransition = {
+                slideInHorizontally(tween(500)) { -it }
+            }
         ) {
             val viewState = rememberKoinInject<NotesViewState>()
             NotesScreen(viewState, navController)
         }
 
         composable<Note>(
-            route = "edit_notes"
+            route = "edit_notes",
+            exitTransition = {
+                slideOutHorizontally(tween(500)) { it }
+            }
         ) { note ->
             val viewState = rememberKoinInject<EditNoteViewState>()
             viewState.putInitialData(note)

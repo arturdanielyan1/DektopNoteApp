@@ -66,18 +66,18 @@ class NavHostController(
         navController.navigate(startDestination, null)
     }
     private val navGraph = NavGraphBuilder().apply(navGraphBuilder)
-    private var currentExitTransition: () -> ExitTransition = { slideOutHorizontally(tween(500)) { -it } }
+    private var currentExitTransition: ExitTransition = slideOutHorizontally(tween(500)) { -it }
 
     @Composable
     fun render() {
         LaunchedEffect(navController.currentScreen.value) {
-            currentExitTransition = { navGraph.getScreenTransitions(navController.currentScreen.value).initialContentExit }
+            currentExitTransition = navGraph.getScreenTransitions(navController.currentScreen.value).initialContentExit
         }
         AnimatedContent(
             targetState = navController.currentScreen.value,
             transitionSpec = {
                 navGraph.getScreenTransitions(this.targetState).targetContentEnter togetherWith
-                currentExitTransition()
+                currentExitTransition
             }
         ) { destination ->
             navGraph.getScreenContent(destination).invoke(navController.lastArgs)

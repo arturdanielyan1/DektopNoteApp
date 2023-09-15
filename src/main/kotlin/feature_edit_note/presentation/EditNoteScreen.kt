@@ -1,7 +1,9 @@
 package feature_edit_note.presentation
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import navigation.NavController
+import navigation.navigationClickable
 
 
 @Composable
@@ -31,7 +34,7 @@ fun EditNoteScreen(
         Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "Navigate back",
-            modifier = Modifier.clickable {
+            modifier = Modifier.navigationClickable {
                 navController.back()
                 viewState.saveNote(note.copy(
                     title = titleState,
