@@ -1,63 +1,36 @@
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.jetbrains.stack.animation.stackAnimation
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import core.component.DefaultRootComponent
+import core.component.RootComponent
 import core.coreModule
-import core.domain.model.Note
 import feature_edit_note.featureEditNoteModule
-import feature_edit_note.presentation.EditNoteScreen
-import feature_edit_note.presentation.EditNoteViewState
 import feature_notes.featureNotesModule
 import feature_notes.presentation.NotesScreen
-import feature_notes.presentation.NotesViewState
-import navigation.NavHost
-import navigation.rememberNavController
-import org.koin.compose.rememberKoinInject
+import org.koin.core.Koin
 import org.koin.core.context.startKoin
 
-@Composable
-@Preview
-fun App() {
-
-    val navController = rememberNavController()
-
-    NavHost(
-        startDestination = "notes_screen",
-        navController = navController
-    ) {
-        composable(
-            route = "notes_screen",
-            enterTransition = {
-                slideInHorizontally(tween(500)) { -it }
-            }
-        ) {
-            val viewState = rememberKoinInject<NotesViewState>()
-            NotesScreen(viewState, navController)
-        }
-
-        composable<Note>(
-            route = "edit_notes",
-            exitTransition = {
-                slideOutHorizontally(tween(500)) { it }
-            }
-        ) { note ->
-            val viewState = rememberKoinInject<EditNoteViewState>()
-            viewState.putInitialData(note)
-            EditNoteScreen(viewState, navController)
-        }
-    }
-}
+lateinit var koin: Koin
 
 fun main() {
 
-    startKoin {
+    koin = startKoin {
         modules(coreModule + featureNotesModule + featureEditNoteModule)
-    }
+    }.koin
+
+    val lifecycle = LifecycleRegistry()
+
+    val root = DefaultRootComponent(DefaultComponentContext(lifecycle))
 
     application {
 
@@ -70,7 +43,19 @@ fun main() {
             resizable = true,
             onCloseRequest = ::exitApplication
         ) {
-            App()
+            MaterialTheme {
+                Surface {
+                    Children(
+                        stack = root.stack,
+                        modifier = Modifier.fillMaxSize(),
+                        animation = stackAnimation(slide())
+                    ) {
+                        when(val instance = it.instance) {
+                            is RootComponent.Child.NotesChild -> NotesScreen(instance.component)
+                        }
+                    }
+                }
+            }
         }
     }
 }

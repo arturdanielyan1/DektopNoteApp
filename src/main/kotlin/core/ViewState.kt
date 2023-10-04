@@ -3,13 +3,13 @@ package core
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import navigation.Argument
+import java.io.Serializable
 
 /**
  * Equivalent of ViewModel from Android
  * InputData is the argument type that will be passed to the screen
  * */
-abstract class ViewState<InputData : Argument> {
+abstract class ViewState<InputData : Serializable> {
     protected val viewStateScope = CoroutineScope(Dispatchers.Main)
 
     private val dataAssigned = false

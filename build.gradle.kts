@@ -36,6 +36,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.3")
 
     implementation(kotlin("stdlib-jdk8"))
+
+    // Decompose
+    implementation("com.arkivanov.decompose:decompose:2.1.2")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:2.1.2")
 }
 
 compose.desktop {

@@ -1,7 +1,6 @@
 package core.domain.model
 
-import navigation.Argument
-import java.time.LocalDateTime
+import java.io.Serializable
 import java.util.Calendar
 
 data class Note(
@@ -9,7 +8,7 @@ data class Note(
     val title: String,
     val content: String,
     val created: Calendar
-) : Argument {
+) : Serializable {
 
     companion object {
         val EMPTY =  Note(

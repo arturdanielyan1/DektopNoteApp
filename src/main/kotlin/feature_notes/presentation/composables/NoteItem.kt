@@ -1,10 +1,15 @@
-package feature_notes.presentation.components
+package feature_notes.presentation.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -17,14 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.domain.model.Note
-import navigation.navigationClickable
 
 @Composable
 fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
     onDeleteNote: (id: Long) -> Unit,
-    onNoteClick: () -> Unit
+    onNoteClick: (id: Long) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -41,7 +45,7 @@ fun NoteItem(
                     color = MaterialTheme.colors.onBackground
                 ),
                 shape = RoundedCornerShape(10.dp),
-            ).navigationClickable(onClick = onNoteClick)
+            ).clickable { onNoteClick(note.id ?: -1) }
             .padding(16.dp)
     ) {
         Row(

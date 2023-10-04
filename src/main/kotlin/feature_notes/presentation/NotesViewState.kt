@@ -3,7 +3,7 @@ package feature_notes.presentation
 import core.ViewState
 import feature_notes.domain.usecases.DeleteNoteUseCase
 import feature_notes.domain.usecases.GetAllNotesUseCase
-import feature_notes.presentation.state_wrappers.NotesState
+import feature_notes.presentation.component.NotesState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
