@@ -1,8 +1,8 @@
 package core.component
 
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.update
+import com.arkivanov.decompose.value.updateAndGet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseComponent<State : UiState, Event: UiEvent, Effect: UiEffect> {
+abstract class BaseComponent<State : UiState, Event: UiEvent, Effect: UiEffect, InputData> {
 
     private val initialState: State by lazy { defineInitialState() }
     protected abstract fun defineInitialState(): State
 
-    private val _state = MutableValue(initialState)
-    val state: Value<State> = _state
+    val state = MutableValue(initialState)
+//    val state: Value<State> = _state
 
     private val _event = MutableSharedFlow<Event>()
 
@@ -26,20 +26,25 @@ abstract class BaseComponent<State : UiState, Event: UiEvent, Effect: UiEffect> 
     protected val currentState: State
         get() = state.value
 
-    protected val scope = CoroutineScope(Dispatchers.Main)
+    protected val componentScope = CoroutineScope(Dispatchers.Main)
 
+
+    private val dataAssigned = false
+    open fun putInitialData(data: InputData) {
+        if(dataAssigned) throw IllegalStateException("Input Data can be assigned only once")
+    }
     init {
         subscribeEvents()
     }
 
     fun sendEvent(event: Event) {
-        scope.launch {
+        componentScope.launch {
             _event.emit(event)
         }
     }
 
     private fun subscribeEvents() {
-        scope.launch {
+        componentScope.launch {
             _event.collect {
                 handleEvent(it)
             }
@@ -48,18 +53,21 @@ abstract class BaseComponent<State : UiState, Event: UiEvent, Effect: UiEffect> 
     protected abstract fun handleEvent(event: Event)
 
     protected fun sendEffect(builder: () -> Effect) {
-        scope.launch {
+        componentScope.launch {
             _effect.emit(builder())
         }
     }
 
     protected fun changeState(modify: State.() -> State) {
-        scope.launch {
-            _state.update(modify)
+        componentScope.launch {
+            val upd = state.updateAndGet {
+                it.modify()
+            }
+            println(upd)
         }
     }
 
     fun finalize() {
-        scope.cancel()
+        componentScope.cancel()
     }
 }

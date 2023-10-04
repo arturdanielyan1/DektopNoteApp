@@ -41,7 +41,7 @@ fun NotesScreen(
         )
         LazyVerticalStaggeredGrid(
             modifier = Modifier.fillMaxSize(),
-            columns = StaggeredGridCells.FixedSize(200.dp)
+            columns = StaggeredGridCells.FixedSize(250.dp)
         ) {
             items(
                 items = notes.value.notes,

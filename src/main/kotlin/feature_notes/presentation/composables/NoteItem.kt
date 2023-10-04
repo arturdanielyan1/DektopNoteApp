@@ -28,7 +28,7 @@ fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
     onDeleteNote: (id: Long) -> Unit,
-    onNoteClick: (id: Long) -> Unit
+    onNoteClick: (note: Note) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -45,7 +45,7 @@ fun NoteItem(
                     color = MaterialTheme.colors.onBackground
                 ),
                 shape = RoundedCornerShape(10.dp),
-            ).clickable { onNoteClick(note.id ?: -1) }
+            ).clickable { onNoteClick(note) }
             .padding(16.dp)
     ) {
         Row(

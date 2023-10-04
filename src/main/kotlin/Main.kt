@@ -15,6 +15,7 @@ import core.component.DefaultRootComponent
 import core.component.RootComponent
 import core.coreModule
 import feature_edit_note.featureEditNoteModule
+import feature_edit_note.presentation.EditNoteScreen
 import feature_notes.featureNotesModule
 import feature_notes.presentation.NotesScreen
 import org.koin.core.Koin
@@ -52,6 +53,11 @@ fun main() {
                     ) {
                         when(val instance = it.instance) {
                             is RootComponent.Child.NotesChild -> NotesScreen(instance.component)
+                            is RootComponent.Child.EditNoteChild -> {
+                                val note = (it.configuration as DefaultRootComponent.Config.EditNote).note
+                                instance.component.putInitialData(note)
+                                EditNoteScreen(instance.component)
+                            }
                         }
                     }
                 }

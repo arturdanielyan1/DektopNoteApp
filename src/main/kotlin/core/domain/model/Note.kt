@@ -1,6 +1,6 @@
 package core.domain.model
 
-import java.io.Serializable
+import com.arkivanov.essenty.parcelable.Parcelable
 import java.util.Calendar
 
 data class Note(
@@ -8,14 +8,4 @@ data class Note(
     val title: String,
     val content: String,
     val created: Calendar
-) : Serializable {
-
-    companion object {
-        val EMPTY =  Note(
-            id = null,
-            title = "",
-            content = "",
-            created = Calendar.getInstance()
-        )
-    }
-}
+) : Parcelable

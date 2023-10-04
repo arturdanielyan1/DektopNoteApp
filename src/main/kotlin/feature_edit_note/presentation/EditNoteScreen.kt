@@ -11,7 +11,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,15 +19,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import feature_edit_note.presentation.component.EditNoteComponent
+import feature_edit_note.presentation.component.EditNoteEvent
 
 
 @Composable
 fun EditNoteScreen(
-    viewState: EditNoteViewState
+    component: EditNoteComponent
 ) {
-    val note by viewState.noteState.collectAsState()
-    var titleState by remember { mutableStateOf(note.title) }
-    var contentState by remember { mutableStateOf(note.content) }
+    val state = component.state.subscribeAsState()
+    var titleState by remember(state.value.note) { mutableStateOf(state.value.note.title) }
+    var contentState by remember(state.value.note) { mutableStateOf(state.value.note.content) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,11 +40,7 @@ fun EditNoteScreen(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "Navigate back",
             modifier = Modifier.clickable {
-                // back
-                viewState.saveNote(note.copy(
-                    title = titleState,
-                    content = contentState
-                ))
+                component.sendEvent(EditNoteEvent.NavigateBack)
             }
         )
         Column {
